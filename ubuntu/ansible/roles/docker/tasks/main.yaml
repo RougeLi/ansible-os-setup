@@ -1,0 +1,27 @@
+---
+# Main task file for Docker installation
+
+# Update apt package index
+- name: Update apt package index
+  apt:
+    update_cache: yes
+    name: "*"
+    state: latest
+
+# Call the file to install prerequisites, GPG key, and repository
+- include_tasks: install-prerequisites-gpg-repo.yaml
+
+# Call the file to install Docker
+- include_tasks: install-docker.yaml
+
+# Call the file to start Docker
+- include_tasks: start-docker.yaml
+
+# Call the file to add the user to the Docker group
+- include_tasks: add-user-to-docker-group.yaml
+
+# Call the file to verify Docker installation
+- include_tasks: verify-docker.yaml
+
+# Call the file to run Hello World container test
+- include_tasks: run-hello-world.yaml

@@ -1,0 +1,26 @@
+---
+
+# Deploy Infrastructure
+- name: Deploy Infrastructure
+  hosts: all
+  gather_facts: yes
+
+# Include the SSHKey role
+- name: Setup SSH keys
+  hosts: all
+  roles:
+    - ssh_key
+
+# Include the Docker role
+- name: Setup Docker
+  hosts: all
+  become: yes
+  roles:
+    - docker
+
+# Include the Git role
+- name: Setup Git
+  hosts: all
+  become: yes
+  roles:
+    - git

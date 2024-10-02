@@ -1,0 +1,8 @@
+---
+# Verify Git installation
+- name: Check Git version
+  command: git --version
+  register: git_version
+
+- debug:
+    var: git_version.stdout

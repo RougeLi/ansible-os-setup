@@ -1,0 +1,7 @@
+---
+
+- name: Setup SSH keys
+  hosts: target_host
+  become: yes
+  roles:
+    - ssh_key

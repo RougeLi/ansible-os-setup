@@ -1,0 +1,6 @@
+---
+- name: Install Git
+  hosts: target_host
+  become: yes
+  roles:
+    - git

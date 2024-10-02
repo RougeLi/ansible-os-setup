@@ -1,0 +1,9 @@
+---
+
+- name: Add multiple public keys from files
+  authorized_key:
+    user: "{{ authorized_user }}"   # 這裡通過變數來定義用戶
+    state: present
+    key: "{{ lookup('file', item) }}"  # 從文件讀取公鑰
+    path: "/home/{{ authorized_user }}/.ssh/authorized_keys"
+  loop: "{{ query('fileglob', '/extra_files/*.pub') }}"  # 循環遍歷所有 .pub 文件
