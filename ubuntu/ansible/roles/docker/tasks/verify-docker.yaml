@@ -1,0 +1,9 @@
+---
+
+# Verify Docker installation
+- name: Check Docker version
+  command: docker --version
+  register: docker_version
+
+- debug:
+    var: docker_version.stdout
