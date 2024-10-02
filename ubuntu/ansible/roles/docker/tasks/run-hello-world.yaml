@@ -1,0 +1,7 @@
+- name: Test Docker installation by running hello-world container
+  command: docker run --rm hello-world
+  register: docker_test
+
+- name: Split Docker test output
+  debug:
+    msg: "{{ docker_test.stdout.split('\n') }}"

@@ -1,0 +1,13 @@
+---
+# Main task file for Git installation
+
+# Update apt package index
+- name: Update apt package index
+  apt:
+    update_cache: yes
+
+# Call the file to install Git
+- include_tasks: install-git.yaml
+
+# Call the file to verify Git installation
+- include_tasks: verify-git.yaml

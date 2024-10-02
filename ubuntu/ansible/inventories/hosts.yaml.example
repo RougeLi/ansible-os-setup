@@ -1,0 +1,6 @@
+all:
+  hosts:
+    target_host:
+      ansible_host: 'Input remote host IP'  # 填上遠端主機 IP
+      ansible_user: 'ubuntu'
+      cloud_provider: 'AWS'  # GCP, AWS, IDC, Other
