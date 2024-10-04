@@ -1,0 +1,7 @@
+---
+
+- name: Configure FTP server with cloud provider-specific settings
+  hosts: target_host
+  become: yes
+  roles:
+    - ftp
