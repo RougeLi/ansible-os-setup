@@ -1,0 +1,41 @@
+---
+
+# Load FTP configuration from JSON file
+- name: Load FTP configuration from JSON file
+  set_fact:
+    ftp_config: "{{ lookup('file', '/credentials/ftp-configuration.json') | from_json }}"
+
+# Set the ftp_server_domain variable
+- name: Set ftp_server_domain variable
+  set_fact:
+    ftp_server_domain: "{{ ftp_config.FTPServerDomain }}"
+
+# Deploy the vsftpd configuration file and ensure it gets re-deployed when the template changes
+- name: Configure vsftpd from template
+  template:
+    src: "vsftpd.conf.j2"
+    dest: "/etc/vsftpd.conf"
+  notify: Restart vsftpd
+
+# Ensure the FTP group exists, avoiding duplicate creation
+- name: Create FTP group if not exists
+  group:
+    name: ftp
+    state: present
+
+# Set ownership of the FTP directory, ensuring correct ownership and group permissions
+- name: Set ownership for the FTP directory
+  file:
+    path: "{{ ftp_data_directory }}"
+    owner: ftp
+    group: ftp
+    mode: '0775'
+    state: directory
+  notify: Set permissions for FTP group
+
+# Add the default user (e.g., ubuntu) and custom users to the FTP group
+- name: Add authorized user to FTP group
+  user:
+    name: "{{ authorized_user }}"
+    groups: ftp
+    append: yes

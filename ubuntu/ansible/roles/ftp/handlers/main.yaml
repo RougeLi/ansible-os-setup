@@ -1,0 +1,17 @@
+---
+
+# Reload the systemd daemon to apply any changes
+- name: Reload systemd daemon
+  command: systemctl daemon-reload
+
+# Restart the vsftpd service to apply any configuration changes
+- name: Restart vsftpd
+  systemd:
+    name: vsftpd
+    state: restarted
+
+# Set permissions for the FTP group, ensuring that new files inherit group permissions
+- name: Set permissions for FTP group
+  file:
+    path: "{{ ftp_data_directory }}"
+    mode: '2775'

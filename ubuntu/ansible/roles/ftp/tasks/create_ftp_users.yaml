@@ -1,0 +1,39 @@
+---
+
+# Check if the FTP users JSON file exists on the local machine
+- name: Check if ftp-users.json file exists
+  local_action:
+    module: stat
+    path: "/credentials/ftp-users.json"
+  register: ftp_users_file
+
+# Load users from JSON if the file exists
+- name: Load FTP users from JSON file
+  set_fact:
+    ftp_users: "{{ lookup('file', '/credentials/ftp-users.json') | from_json }}"
+  when: ftp_users_file.stat.exists
+
+# Ensure FTP user exists and set password
+- name: Ensure FTP user exists and set password
+  user:
+    name: "{{ user_info.user }}"
+    state: present
+    create_home: yes
+    home: "/home/{{ user_info.user }}"
+    shell: /bin/bash
+    password: "{{ user_info.password | password_hash('sha512') }}"
+  loop: "{{ ftp_users }}"
+  loop_control:
+    loop_var: user_info
+  when: ftp_users_file.stat.exists
+
+# Add FTP user to FTP group
+- name: Add FTP user to FTP group
+  user:
+    name: "{{ user_info.user }}"
+    groups: ftp
+    append: yes
+  loop: "{{ ftp_users }}"
+  loop_control:
+    loop_var: user_info
+  when: ftp_users_file.stat.exists

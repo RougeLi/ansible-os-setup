@@ -1,0 +1,41 @@
+# 允許本地用戶登錄
+local_enable=YES
+
+# 啟用本地用戶的chroot，限制用戶訪問在chroot目錄下的文件
+chroot_local_user=YES
+
+# 允許本地用戶寫入
+allow_writeable_chroot=YES
+
+# 允許本地用戶上傳文件
+write_enable=YES
+
+# 設置本地使用者的根目錄
+local_root={{ ftp_data_directory }}
+
+# 禁止匿名FTP用戶登錄
+anonymous_enable=NO
+
+# 啟用上傳/下載日誌記錄
+xferlog_enable=YES
+
+# 設置安全的chroot目錄，以限制用戶對系統文件的訪問
+secure_chroot_dir=/var/run/vsftpd/empty
+
+# 指定vsftpd PAM服務名稱，以進行用戶身份驗證
+pam_service_name=vsftpd
+
+# 啟用IPv6連接，接受來自IPv6和IPv4的連接
+listen_ipv6=YES
+
+# 若需要顯示自訂的目錄訊息則啟用
+dirmessage_enable=YES
+
+# 使用本地時區顯示目錄時間
+use_localtime=YES
+
+# 強制FTP數據連接來自20端口
+connect_from_port_20=YES
+
+# 設置默認umask，確保上傳的文件權限為775
+local_umask=002

@@ -1,0 +1,21 @@
+---
+
+# Update apt package index
+- name: Update apt package index
+  apt:
+    update_cache: yes
+    name: "*"
+    state: latest
+
+# Ensure vsftpd is installed
+- name: Ensure vsftpd is installed
+  apt:
+    name: vsftpd
+    state: present
+
+# Ensure the FTP data directory exists
+- name: Create FTP data directory
+  file:
+    path: "{{ ftp_data_directory }}"
+    state: directory
+    mode: '0755'
