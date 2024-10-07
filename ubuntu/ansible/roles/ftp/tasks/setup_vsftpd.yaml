@@ -1,0 +1,36 @@
+---
+
+- name: Load FTP configuration from YAML file
+  set_fact:
+    ftp_config: "{{ lookup('file', '/credentials/ftp-configuration.yaml') | from_yaml }}"
+
+# Set the ftp_server_domain variable
+- name: Set ftp_server_domain variable
+  set_fact:
+    ftp_server_domain: "{{ ftp_config.FTPServerDomain }}"
+
+- name: Deploy the vsftpd configuration file and ensure it gets re-deployed when the template changes
+  template:
+    src: "vsftpd.conf.j2"
+    dest: "/etc/vsftpd.conf"
+  notify: Restart vsftpd
+
+- name: Ensure the FTP group exists, avoiding duplicate creation
+  group:
+    name: ftp
+    state: present
+
+- name: Set ownership of the FTP directory, ensuring correct ownership and group permissions
+  file:
+    path: "{{ ftp_data_directory }}"
+    owner: ftp
+    group: ftp
+    mode: '0775'
+    state: directory
+  notify: Set permissions for FTP group
+
+- name: Add the default user (e.g., ubuntu) and custom users to the FTP group
+  user:
+    name: "{{ authorized_user }}"
+    groups: ftp
+    append: yes

@@ -1,0 +1,19 @@
+---
+# Main task file for FTP installation
+
+# Include common tasks for all providers (e.g., creating FTP directory, installing vsftpd)
+- name: Common setup for all providers
+  include_tasks: setup_common.yaml
+
+# If the cloud provider is AWS, run additional AWS tasks
+- name: Setup AWS specific configuration
+  include_tasks: setup_aws_s3.yaml
+  when: cloud_provider == "AWS"
+
+# Setup vsftpd for all providers
+- name: Setup vsftpd configuration
+  include_tasks: setup_vsftpd.yaml
+
+# Create FTP users from the YAML file
+- name: Create FTP users
+  include_tasks: create_ftp_users.yaml

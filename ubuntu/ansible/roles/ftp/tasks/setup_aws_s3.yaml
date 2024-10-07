@@ -1,0 +1,32 @@
+---
+
+- name: Install S3 dependencies (e.g., s3fs)
+  apt:
+    name: s3fs
+    state: present
+
+- name: Load AWS credentials from a YAML file and set it as a variable
+  set_fact:
+    aws_credentials: "{{ lookup('file', '/credentials/aws-configuration.yaml') | from_yaml }}"
+
+- name: Create AWS credentials file for s3fs
+  copy:
+    content: "{{ aws_credentials.aws_access_key }}:{{ aws_credentials.aws_secret_key }}"
+    dest: "/root/.passwd-s3fs"
+    mode: '0600'
+
+- name: Mount S3 bucket to the FTP data directory
+  command: "s3fs {{ s3_bucket_name }} {{ ftp_data_directory }} -o allow_other -o use_cache=/tmp"
+  args:
+    creates: "{{ ftp_data_directory }}/.s3fs_mounted"
+
+- name: Create a flag file to mark S3 mounted
+  file:
+    path: "{{ ftp_data_directory }}/.s3fs_mounted"
+    state: touch
+
+- name: Add S3 mount information to fstab for persistence
+  lineinfile:
+    path: "/etc/fstab"
+    line: "s3fs#{{ s3_bucket_name }} {{ ftp_data_directory }} fuse _netdev,allow_other,use_cache=/tmp 0 0"
+    state: present

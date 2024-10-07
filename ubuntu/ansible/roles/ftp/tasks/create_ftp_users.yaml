@@ -1,0 +1,35 @@
+---
+
+- name: Check if the FTP users YAML file exists on the local machine
+  local_action:
+    module: stat
+    path: "/credentials/ftp-users.yaml"
+  register: ftp_users_file
+
+- name: Load users from YAML if the file exists
+  set_fact:
+    ftp_users: "{{ lookup('file', '/credentials/ftp-users.yaml') | from_yaml }}"
+  when: ftp_users_file.stat.exists
+
+- name: Ensure FTP user exists and set password
+  user:
+    name: "{{ user_info.user }}"
+    state: present
+    create_home: yes
+    home: "/home/{{ user_info.user }}"
+    shell: /bin/bash
+    password: "{{ user_info.password | password_hash('sha512') }}"
+  loop: "{{ ftp_users }}"
+  loop_control:
+    loop_var: user_info
+  when: ftp_users_file.stat.exists
+
+- name: Add FTP user to FTP group
+  user:
+    name: "{{ user_info.user }}"
+    groups: ftp
+    append: yes
+  loop: "{{ ftp_users }}"
+  loop_control:
+    loop_var: user_info
+  when: ftp_users_file.stat.exists
