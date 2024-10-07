@@ -1,0 +1,19 @@
+---
+
+# Deploy FTP infrastructure
+- name: Deploy FTP infrastructure
+  hosts: all
+  gather_facts: yes
+
+# Include the SSH key role
+- name: Setup SSH keys
+  hosts: all
+  roles:
+    - ssh_key
+
+# Include the FTP role
+- name: Setup FTP server
+  hosts: all
+  become: yes
+  roles:
+    - ftp
