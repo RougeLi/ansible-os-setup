@@ -1,0 +1,7 @@
+---
+
+- name: Setup environment variables
+  hosts: target_host
+  become: yes
+  roles:
+    - environment_variable
