@@ -1,0 +1,16 @@
+---
+
+- name: Load environment variables from a YAML file
+  set_fact:
+    env_vars: "{{ lookup('file', '/credentials/env_map.yaml') | from_yaml }}"
+
+- name: Add environment variables to the specified user's .bashrc
+  lineinfile:
+    path: "/home/{{ lineinfile_target_user }}/.bashrc"
+    regexp: "^export {{ item.key }}="
+    line: "export {{ item.key }}={{ item.value }}"
+    state: present
+    create: yes
+  become: yes
+  become_user: "{{ lineinfile_target_user }}"
+  loop: "{{ env_vars | dict2items }}"
