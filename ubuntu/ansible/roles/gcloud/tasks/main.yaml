@@ -1,0 +1,24 @@
+---
+# Main task file for Google Cloud SDK installation
+
+- name: Check if 'gcloud' command exists
+  command: which gcloud
+  register: gcloud_check
+  ignore_errors: yes
+
+- name: Include plugin installation tasks if 'gcloud' is installed
+  include_tasks: install_gcloud_plugin.yaml
+  when: gcloud_check.rc != 0
+
+- name: Check if service account key exists on control node
+  stat:
+    path: /credentials/{{ service_account_credentials }}
+  register: service_account_key
+  delegate_to: localhost
+
+- name: Configure service account if key exists
+  include_tasks: setup_service_account.yaml
+  vars:
+    local_service_account_key: /credentials/{{ service_account_credentials }}
+    remote_service_account_key: /tmp/{{ service_account_credentials }}
+  when: service_account_key.stat.exists

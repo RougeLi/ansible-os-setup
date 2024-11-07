@@ -1,0 +1,7 @@
+---
+
+# 設定 GCP 服務帳戶金鑰組
+service_account_credentials: ru-project-artifact-registry-user.json
+
+# 設定 GCP Artifact Registry region
+gar_region: asia-east1-docker.pkg.dev
