@@ -1,0 +1,7 @@
+---
+# install-gcloud.yaml
+
+- name: Install gcloud
+  hosts: target_host
+  roles:
+    - gcloud

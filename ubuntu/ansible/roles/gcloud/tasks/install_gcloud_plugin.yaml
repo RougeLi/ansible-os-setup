@@ -1,0 +1,50 @@
+---
+
+- name: Update apt package index
+  apt:
+    update_cache: yes
+  become: yes
+
+- name: Install necessary dependencies
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+    - gnupg
+    - curl
+  become: yes
+
+- name: Download apt key and convert it to GPG format
+  shell: |
+    curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
+  args:
+    creates: /usr/share/keyrings/cloud.google.gpg
+  register: gpg_key_result
+  become: yes
+
+- name: Add Google Cloud SDK repository
+  apt_repository:
+    repo: "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main"
+    state: present
+  become: yes
+
+- name: Update apt package index after adding Google Cloud SDK repository
+  apt:
+    update_cache: yes
+  become: yes
+
+- name: Install Google Cloud SDK
+  apt:
+    name: google-cloud-sdk
+    state: present
+  become: yes
+
+- name: Check gcloud version
+  command: gcloud --version
+  register: gcloud_version
+  ignore_errors: yes
+
+- debug:
+    var: gcloud_version.stdout_lines
