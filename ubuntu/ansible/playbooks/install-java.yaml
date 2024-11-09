@@ -1,0 +1,6 @@
+---
+- name: Install Java
+  hosts: target_host
+  become: yes
+  roles:
+    - java
