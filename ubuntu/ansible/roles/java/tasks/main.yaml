@@ -1,20 +1,21 @@
 ---
-# Main task file for Git and Java installation
+# Main task file for Java installation
 
 - name: Update apt package index
   apt:
     update_cache: yes
 
-- name: Install OpenJDK 17
+- name: Install OpenJDK
   apt:
-    name: openjdk-17-jdk
+    name: "openjdk-{{ java_version }}-jdk"
     state: present
 
 - name: Check Java version
   command: java -version
   register: java_version_result
+  changed_when: false
   ignore_errors: yes
 
 - name: Output java_version_result
   debug:
-    msg: "{{ java_version_result.stdout_lines }}"
+    msg: "{{ java_version_result.stderr_lines }}"
