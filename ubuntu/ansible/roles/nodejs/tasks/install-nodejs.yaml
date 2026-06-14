@@ -1,0 +1,6 @@
+---
+# Install Node.js
+- name: Install Node.js
+  apt:
+    name: "{{ nodejs_package_name }}"
+    state: present

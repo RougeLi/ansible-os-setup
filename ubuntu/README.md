@@ -2,6 +2,8 @@
 
 此目錄包含針對 Ubuntu 作業系統的 Ansible Playbooks、主機清單和相關設定，適用於快速部署 Docker 和 Git 等常見的系統套件。
 
+目前也提供透過 NodeSource 安裝 Node.js 24 LTS 的 Playbook：`ansible/playbooks/install-nodejs.yaml`。
+
 ## Inventories 目錄
 
 `inventories` 目錄內的 `hosts` 文件存放了目標主機的相關資訊。  
@@ -51,3 +53,17 @@ all:
 ## credentials 目錄
 
 `credentials` 目錄存放各種憑證文件，如 SSH 私鑰、AWS 存取金鑰等。  
+
+## 常用 Playbooks
+
+- `ansible/playbooks/install-docker.yaml`：安裝 Docker。
+- `ansible/playbooks/install-git.yaml`：安裝 Git。
+- `ansible/playbooks/install-java.yaml`：安裝 Java。
+- `ansible/playbooks/install-nodejs.yaml`：透過 NodeSource 安裝 Node.js 24 LTS 與 npm。
+
+執行 Node.js 安裝範例：
+
+```bash
+./execute-playbook.sh install-nodejs.yaml
+```
+

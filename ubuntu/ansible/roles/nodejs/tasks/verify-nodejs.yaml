@@ -1,0 +1,19 @@
+---
+# Verify Node.js installation
+- name: Check Node.js version
+  command: node --version
+  register: nodejs_version_result
+  changed_when: false
+
+- name: Output nodejs_version_result
+  debug:
+    msg: "{{ nodejs_version_result.stdout }}"
+
+- name: Check npm version
+  command: npm --version
+  register: npm_version_result
+  changed_when: false
+
+- name: Output npm_version_result
+  debug:
+    msg: "{{ npm_version_result.stdout }}"

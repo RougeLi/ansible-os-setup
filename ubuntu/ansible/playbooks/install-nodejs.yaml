@@ -1,0 +1,6 @@
+---
+- name: Install Node.js
+  hosts: target_host
+  become: yes
+  roles:
+    - nodejs

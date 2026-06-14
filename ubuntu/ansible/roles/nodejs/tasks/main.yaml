@@ -1,0 +1,12 @@
+---
+# Main task file for Node.js installation
+
+- name: Update apt package index
+  apt:
+    update_cache: yes
+
+- include_tasks: install-prerequisites-gpg-repo.yaml
+
+- include_tasks: install-nodejs.yaml
+
+- include_tasks: verify-nodejs.yaml

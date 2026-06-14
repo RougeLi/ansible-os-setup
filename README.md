@@ -56,6 +56,11 @@
 
    這會啟動 Ansible 容器，並根據您指定的 Playbook 進行執行。
 
+   **安裝 Node.js 24 LTS（NodeSource）範例**：
+   ```bash
+   ./execute-playbook.sh install-nodejs.yaml
+   ```
+
 ## Directory Structure
 
 專案的目錄結構如下所示：
@@ -98,3 +103,4 @@ ansible-os-setup/
   ```yaml
   ansible_ssh_private_key_file: '/credential/os_setup_rsa'
   ```
+- Ubuntu 目錄新增了 `nodejs` role，可透過 `ubuntu/ansible/playbooks/install-nodejs.yaml` 安裝 Node.js 24 LTS 與 npm。
